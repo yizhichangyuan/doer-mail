@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    gateway:
+      routes:
+        - id: baidu_route
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baidu
+
+        - id: qq_route
+          uri: https://www.qq.com
+          predicates:
+            - Query=url,qq
+
+        - id: admin_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://renren-fast
+          predicates:
+            - Path= /api/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), /renren-fast$\{segment}
+             # 前端项目发送请求，都有/api
+             # 前端请求http://localhost:88/api/captcha
+             # 网关在Nacos找到可用renren-fast服务及端口号后，转发http://地址:端口号/api/captcha
+             # 而实际访问应该是http://localhost:8080/renren-fast/captcha，这里就应该用到Filter进行重写路径
+             # 先经过predicates后判断路径符合，符合后对请求路径进行重写在将重写后的路径发送给renren-fast服务
+             # 将请求的captcha取出与renren-fast拼接
+
+  application:
+    name: doermail-member
+
+server:
+  port: 88
