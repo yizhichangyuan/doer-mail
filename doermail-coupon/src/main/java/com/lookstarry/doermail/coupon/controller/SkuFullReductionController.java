@@ -1,15 +1,14 @@
 package com.lookstarry.doermail.coupon.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.lookstarry.common.to.SkuReductionTo;
+import com.lookstarry.doermail.coupon.entity.SpuBoundsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lookstarry.doermail.coupon.entity.SkuFullReductionEntity;
 import com.lookstarry.doermail.coupon.service.SkuFullReductionService;
@@ -29,6 +28,13 @@ import com.lookstarry.common.utils.R;
 public class SkuFullReductionController {
     @Autowired
     private SkuFullReductionService skuFullReductionService;
+
+    @PostMapping("/saveBatchSkuReduction")
+    //@RequiresPermissions("coupon:spubounds:saveBatchSkuReduction")
+    public R saveBatchSkuReduction(@RequestBody List<SkuReductionTo> skuReductionToList){
+        skuFullReductionService.saveBatchSkuReduction(skuReductionToList);
+        return R.ok();
+    }
 
     /**
      * 列表

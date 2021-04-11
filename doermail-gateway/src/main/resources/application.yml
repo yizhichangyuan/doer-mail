@@ -16,6 +16,36 @@ spring:
           predicates:
             - Query=url,qq
 
+        - id: product_route
+          uri: lb://doermail-product
+          predicates:
+            - Path= /api/product/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+            # http://localhost:88/api/product/category/list/tree -> http://localhost:10000/product/category/list/tree
+            # 所以只需要保留api后面的部分然后转发给lb://doermail-product
+
+        - id: third_party_route
+          uri: lb://doermail-third-party
+          predicates:
+            - Path= /api/thirdparty/**
+          filters:
+            - RewritePath= /api/thirdparty(?<segment>/?.*), $\{segment}
+
+        - id: member_route
+          uri: lb://doermail-member
+          predicates:
+            - Path= /api/member/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
+        - id: ware_route
+          uri: lb://doermail-ware
+          predicates:
+            - Path= /api/ware/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
         - id: admin_route
           # lb为load_balance使用复杂均衡，后面为服务名
           uri: lb://renren-fast
@@ -31,7 +61,7 @@ spring:
              # 将请求的captcha取出与renren-fast拼接
 
   application:
-    name: doermail-member
+    name: doermail-gateway
 
 server:
   port: 88

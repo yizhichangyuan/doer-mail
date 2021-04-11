@@ -2,6 +2,7 @@ package com.lookstarry.doermail.coupon.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,6 +27,11 @@ public class SpuBoundsServiceImpl extends ServiceImpl<SpuBoundsDao, SpuBoundsEnt
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public void saveBatchBoundsEntityList(List<SpuBoundsEntity> spuBoundsEntityList) {
+
     }
 
 }

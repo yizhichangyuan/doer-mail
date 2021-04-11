@@ -10,8 +10,18 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 
+#    alicloud:
+#      access-key: LTAI5t75KXjVWjGJhxUsBZxv   # oss文件上传key
+#      secret-key: N0ZiNdO6GEJQEKxZMmuHwTq2F8Fwg7 # oss文件上传密匙
+#      oss:
+#        endpoint: oss-cn-beijing.aliyuncs.com  # bucket名，oss文件上传到哪个容器
+
   application:
     name: doermail-product
+
+# json字段返回时有日期字段的同一格式化
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -19,6 +29,28 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 server:
   port: 10000
+
+logging:
+  level:
+    com.lookstarry.doermail: debug
+
+#调用openfeign，hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 30000
+
+# ribbon的超时时间
+riboon:
+  ReadTimeout: 30000
+  ConnectTimeout: 30000

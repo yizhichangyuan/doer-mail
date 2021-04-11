@@ -23,6 +23,7 @@
 		<module>doermail-ware</module>
 		<module>renren-fast</module>
 		<module>renren-generator</module>
+		<module>doermail-common</module>
 	</modules>
 
 </project>

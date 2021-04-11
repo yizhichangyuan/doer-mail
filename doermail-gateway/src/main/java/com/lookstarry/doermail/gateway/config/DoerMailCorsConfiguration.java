@@ -19,6 +19,7 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 public class DoerMailCorsConfiguration {
+    // 这是一个filter，会在请求结束返回给浏览器时，会在响应头中加上这些告诉浏览器可以跨域
     @Bean
     public CorsWebFilter corsWebFilter(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -1,0 +1,12 @@
+# 配置nacos服务注册地址
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  application:
+    name: doermail-third-party
+
+server:
+  port: 30000
