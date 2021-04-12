@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: make1234
-    url: jdbc:mysql://10.211.55.4/gulimall_pms
+    url: jdbc:mysql://10.211.55.4/gulimall_pms?rewriteBatchedStatements=true&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:

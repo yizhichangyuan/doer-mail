@@ -72,6 +72,23 @@ public class Constant {
     }
 
     /**
+     * 采购单状态
+     */
+    public enum PurchaseSheetStatus{
+        NEW(0), HAVE_DISTRIBUTE(1), PURCHASING(2), DONE(3), FAIL(4);
+
+        private int value;
+
+        private PurchaseSheetStatus(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
+    /**
      * 定时任务状态
      *
      * @author chenshun

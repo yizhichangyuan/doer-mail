@@ -2,7 +2,8 @@ spring:
   datasource:
     username: root
     password: make1234
-    url: jdbc:mysql://10.211.55.4/gulimall_wms
+    # mysql连接需要开启批量插入，允许批量查询
+    url: jdbc:mysql://10.211.55.4/gulimall_wms?rewriteBatchedStatements=true&allowMultiQueries=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:
@@ -13,6 +14,10 @@ spring:
   application:
     name: doermail-ware
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:
@@ -21,3 +26,7 @@ mybatis-plus:
 
 server:
   port: 11000
+
+logging:
+  level:
+    com.lookstarry.doermail.ware.dao: debug

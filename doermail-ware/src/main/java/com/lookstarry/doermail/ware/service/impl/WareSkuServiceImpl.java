@@ -1,5 +1,6 @@
 package com.lookstarry.doermail.ware.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,9 +21,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        QueryWrapper<WareSkuEntity> queryWrapper = new QueryWrapper<WareSkuEntity>();
+        String wareId = (String)params.get("wareId");
+        String skuId = (String)params.get("skuId");
+        System.out.println("skuId:" + skuId);
+        if(StringUtils.isNotEmpty(wareId) && StringUtils.isNumeric(wareId) && !wareId.equalsIgnoreCase("0")){
+            queryWrapper.eq("ware_id", wareId);
+        }
+        if(StringUtils.isNotEmpty(skuId) && StringUtils.isNumeric(skuId) && !skuId.equalsIgnoreCase("0")){
+            queryWrapper.eq("sku_id", skuId);
+        }
         IPage<WareSkuEntity> page = this.page(
                 new Query<WareSkuEntity>().getPage(params),
-                new QueryWrapper<WareSkuEntity>()
+                queryWrapper
         );
 
         return new PageUtils(page);
