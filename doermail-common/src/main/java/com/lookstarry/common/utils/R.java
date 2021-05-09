@@ -8,6 +8,8 @@
 
 package com.lookstarry.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import org.apache.http.HttpStatus;
 
 import java.util.HashMap;
@@ -20,6 +22,25 @@ import java.util.Map;
  */
 public class R extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
+
+    public <T> T getData(String name, TypeReference<T> typeReference){
+        Object object = this.get(name); // 调用方调用时，传过来的是一个Map
+        String jsonStr = JSON.toJSONString(object);
+        T t = JSON.parseObject(jsonStr, typeReference);
+        return t;
+    }
+
+    public <T> T getData(TypeReference<T> typeReference){
+        Object object = this.get("data"); // 调用方调用时，传过来的是一个Map
+        String jsonStr = JSON.toJSONString(object);
+        T t = JSON.parseObject(jsonStr, typeReference);
+        return t;
+    }
+
+    public R setData(Object data) {
+        this.put("data", data);
+        return this;
+    }
 
     public R() {
         put("code", 0);

@@ -1,9 +1,13 @@
 package com.lookstarry.doermail.ware.service.impl;
 
+import com.lookstarry.common.to.SkuHasStockVo;
+import com.lookstarry.doermail.ware.entity.WareSkuLeftEntity;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -37,6 +41,26 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<SkuHasStockVo> hasStock(List<Long> skuIds) {
+        if(skuIds != null && skuIds.size() != 0){
+            List<WareSkuLeftEntity> wareSkuLeftEntities = this.baseMapper.selectLeftStock(skuIds);
+            Map<Long, Long> idToStock = wareSkuLeftEntities.stream().collect(Collectors.toMap(WareSkuLeftEntity::getSkuId, WareSkuLeftEntity::getStockLeft));
+            List<SkuHasStockVo> skuHasStockVos = skuIds.stream().map((id) -> {
+                SkuHasStockVo skuHasStockVo = new SkuHasStockVo();
+                skuHasStockVo.setSkuId(id);
+                if(idToStock != null){
+                    skuHasStockVo.setHasStock(idToStock.get(id) == null ? false : idToStock.get(id) > 0);
+                }else{
+                    skuHasStockVo.setHasStock(false);
+                }
+                return skuHasStockVo;
+            }).collect(Collectors.toList());
+            return skuHasStockVos;
+        }
+        return null;
     }
 
 }

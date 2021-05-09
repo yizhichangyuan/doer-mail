@@ -1,6 +1,7 @@
 package com.lookstarry.doermail.thirdparty;
 
 import com.aliyun.oss.OSSClient;
+import com.lookstarry.doermail.thirdparty.component.SmsComponent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,14 @@ import java.io.InputStream;
 public class DoermailThirdPartyApplicationTests {
     @Autowired(required = false)
     private OSSClient ossClient;
+
+    @Autowired
+    private SmsComponent smsComponent;
+
+    @Test
+    public void testSms(){
+        smsComponent.sendCode("18810776951", "123123");
+    }
 
     @Test
     public void contextLoads() {

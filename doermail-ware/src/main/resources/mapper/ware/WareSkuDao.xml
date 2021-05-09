@@ -13,5 +13,14 @@
         <result property="stockLocked" column="stock_locked"/>
     </resultMap>
 
-
+    <select id="selectLeftStock" resultType="com.lookstarry.doermail.ware.entity.WareSkuLeftEntity">
+        select sku_id,sum(stock - stock_locked) as stock_left from wms_ware_sku
+        where sku_id in
+        <if test="skuIds != null and skuIds.size() != 0">
+            <foreach collection="skuIds" item="skuId" open="(" close=")" separator=",">
+                #{skuId}
+            </foreach>
+        </if>
+        group by sku_id;
+    </select>
 </mapper>

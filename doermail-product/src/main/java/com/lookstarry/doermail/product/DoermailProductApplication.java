@@ -3,6 +3,7 @@ package com.lookstarry.doermail.product;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
@@ -36,6 +37,20 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  *     @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE})
  *     @Retention(RetentionPolicy.RUNTIME)
  *
+ * 4、模板引擎
+ *  1）引入依赖：thymeleaf-starter，关闭缓存
+ *  2）静态资源（js/css/img）都放在static文件夹下，就可以按照路径直接访问（路径不需要添加static）
+ *  3）html页面都放在templates下，直接访问
+ *      原因在于：访问项目的时候，默认会找index
+ *
+ * 5、整合redisson作为分布式锁等功能框架
+ *  1）引入依赖
+ *          <dependency>
+ *             <groupId>org.redisson</groupId>
+ *             <artifactId>redisson</artifactId>
+ *             <version>3.15.3</version>
+ *         </dependency>
+ *  2）配置redisson
  */
 @EnableFeignClients(basePackages = "com.lookstarry.doermail.product.feign")
 @SpringBootApplication

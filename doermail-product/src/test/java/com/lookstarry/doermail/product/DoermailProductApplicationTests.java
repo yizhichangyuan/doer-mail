@@ -7,12 +7,16 @@ import com.lookstarry.doermail.product.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RunWith(SpringRunner.class)
@@ -24,8 +28,27 @@ public class DoermailProductApplicationTests {
     @Autowired
     private CategoryService categoryService;
 
-//    @Resource
-//    private OSSClient ossClient;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
+
+    @Test
+    public void redisson(){
+        System.out.println(redissonClient);
+    }
+
+    @Test
+    public void testStringRedisTemplate(){
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        // 保存
+        ops.set("hello", "world_" + UUID.randomUUID().toString());
+        // 查询
+        String hello = ops.get("hello");
+        System.out.println("之前保存的数据时：" + hello);
+
+    }
 
     @Test
     public void contextLoads() {

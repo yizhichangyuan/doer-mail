@@ -2,7 +2,12 @@ package com.lookstarry.doermail.ware.dao;
 
 import com.lookstarry.doermail.ware.entity.WareSkuEntity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lookstarry.doermail.ware.entity.WareSkuLeftEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import javax.websocket.server.PathParam;
+import java.util.List;
 
 /**
  * 商品库存
@@ -13,5 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
-
+    List<WareSkuLeftEntity> selectLeftStock(@Param("skuIds") List<Long> skuIds);
 }

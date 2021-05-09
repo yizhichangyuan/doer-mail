@@ -6,20 +6,28 @@ spring:
 
     gateway:
       routes:
-        - id: baidu_route
-          uri: https://www.baidu.com
+        - id: host_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-product
           predicates:
-            - Query=url,baidu
+            - Host=doermall.com,item.doermall.com
 
-        - id: qq_route
-          uri: https://www.qq.com
+        - id: doermall_search_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-search
           predicates:
-            - Query=url,qq
+            - Host=search.doermall.com
+
+        - id: doermall_auth_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-auth-server
+          predicates:
+            - Host=auth.doermall.com
 
         - id: product_route
           uri: lb://doermail-product
           predicates:
-            - Path= /api/product/**
+            - Path= /api/product/**,/hello
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
             # http://localhost:88/api/product/category/list/tree -> http://localhost:10000/product/category/list/tree

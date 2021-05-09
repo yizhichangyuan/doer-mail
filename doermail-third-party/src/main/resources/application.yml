@@ -10,3 +10,12 @@ spring:
 
 server:
   port: 30000
+
+doermall:
+  sms:
+    appcode: c1774f94a64c432097cc01196c313501
+    host: https://msg.market.alicloudapi.com
+    path: /msg
+    title: 云码通
+    mouldno: 44CAD037
+

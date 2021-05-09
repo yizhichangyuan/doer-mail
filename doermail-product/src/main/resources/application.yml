@@ -2,7 +2,7 @@ spring:
   datasource:
     username: root
     password: make1234
-    url: jdbc:mysql://10.211.55.4/gulimall_pms?rewriteBatchedStatements=true&allowMultiQueries=true
+    url: jdbc:mysql://192.168.2.200:3306/gulimall_pms?rewriteBatchedStatements=true&allowMultiQueries=true&autoReconnect=true
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   cloud:
@@ -23,6 +23,23 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 
+  thymeleaf:
+    cache: false
+
+  redis:
+    host: 192.168.2.200
+    port: 6379
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000 # 毫秒单位
+#      key-prefix: CACHE_ # 如果指定了前缀就用我们指定的前缀，如果没有就默认使用缓存的名字cacheNames作为前缀
+      use-key-prefix: true # 是否使用缓存前缀
+      cache-null-values: true # 是否缓存空值，防止缓存穿透问题
+
+
+
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   # @TableId默认为None，这里设置为自增主键
@@ -39,18 +56,35 @@ logging:
   level:
     com.lookstarry.doermail: debug
 
+
+feign:
+  hystrix:
+    enabled: true
+
 #调用openfeign，hystrix的超时时间
 hystrix:
   command:
     default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 300000
+        forceClosed: true
       execution:
         timeout:
-          enabled: true
+          enabled: false
         isolation:
           thread:
-            timeoutInMilliseconds: 30000
+            timeoutInMilliseconds: 300000
+
 
 # ribbon的超时时间
 riboon:
-  ReadTimeout: 30000
+  SocketTimeout: 300000
+  ReadTimeout: 300000
   ConnectTimeout: 30000
+
+doermall:
+  thread:
+    core-pool-size: 20
+    max-pool-size: 200
+    keep-alive-time: 10
+

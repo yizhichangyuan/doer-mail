@@ -1,16 +1,18 @@
 package com.lookstarry.doermail.member.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.lookstarry.common.constant.BizCodeEnum;
+import com.lookstarry.doermail.member.exception.MobileExistException;
+import com.lookstarry.doermail.member.exception.UsernameExistException;
 import com.lookstarry.doermail.member.feign.CouponFeignService;
+import com.lookstarry.doermail.member.vo.MemberLoginVo;
+import com.lookstarry.doermail.member.vo.MemberRegistVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lookstarry.doermail.member.entity.MemberEntity;
 import com.lookstarry.doermail.member.service.MemberService;
@@ -33,6 +35,27 @@ public class MemberController {
 
     @Autowired
     private CouponFeignService couponFeignService;
+
+    @PostMapping("/register")
+    public R memberRegist(@RequestBody MemberRegistVo registVo){
+        try{
+            memberService.registerMember(registVo);
+        }catch(UsernameExistException e){
+            return R.error(BizCodeEnum.USERNAME_EXIST_EXCEPTION.getCode(), BizCodeEnum.USERNAME_EXIST_EXCEPTION.getMessage());
+        }catch(MobileExistException e){
+            return R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMessage());
+        }
+        return R.ok();
+    }
+
+    @PostMapping("/login")
+    public R memberLogin(@RequestBody MemberLoginVo loginVo){
+        boolean success = memberService.loginMember(loginVo);
+        if(!success){
+            return R.error(BizCodeEnum.LOGIN_FAIL_EXCEPTION.getCode(), BizCodeEnum.LOGIN_FAIL_EXCEPTION.getMessage());
+        }
+        return R.ok();
+    }
 
     @RequestMapping("/coupons")
     public R test() {
@@ -84,7 +107,6 @@ public class MemberController {
     //@RequiresPermissions("member:member:update")
     public R update(@RequestBody MemberEntity member) {
         memberService.updateById(member);
-
         return R.ok();
     }
 

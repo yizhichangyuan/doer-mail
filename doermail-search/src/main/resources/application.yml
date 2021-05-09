@@ -1,0 +1,30 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+  application:
+    name: doermail-search
+
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.2.200:9300
+      cluster-name: elasticsearch
+
+  thymeleaf:
+    cache: false
+
+
+
+# ES中检索条件DSL打印
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            core: debug
+
+server:
+  port: 12000

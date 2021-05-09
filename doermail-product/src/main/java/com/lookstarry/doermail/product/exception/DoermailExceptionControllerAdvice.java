@@ -1,6 +1,6 @@
 package com.lookstarry.doermail.product.exception;
 
-import com.lookstarry.common.exception.BizCodeEnum;
+import com.lookstarry.common.constant.BizCodeEnum;
 import com.lookstarry.common.utils.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;

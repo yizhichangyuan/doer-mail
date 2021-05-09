@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: doermail-auth-server
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  thymeleaf:
+    cache: false
+
+  redis:
+    host: 192.168.2.200
+    port: 6379
+
+server:
+  port: 20000
+
+#调用openfeign，hystrix的超时时间
+hystrix:
+  command:
+    default:
+      circuitBreaker:
+        sleepWindowInMilliseconds: 300000
+        forceClosed: true
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300000
+
+
+# ribbon的超时时间
+riboon:
+  SocketTimeout: 300000
+  ReadTimeout: 300000
+  ConnectTimeout: 30000
+
+
