@@ -2,6 +2,7 @@ package com.lookstarry.doermail.member.service.impl;
 
 import com.lookstarry.doermail.member.constant.MemberStatusConstant;
 import com.lookstarry.doermail.member.entity.MemberLevelEntity;
+import com.lookstarry.doermail.member.entity.MemberReceiveAddressEntity;
 import com.lookstarry.doermail.member.exception.MobileExistException;
 import com.lookstarry.doermail.member.exception.UsernameExistException;
 import com.lookstarry.doermail.member.service.MemberLevelService;
@@ -11,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Modifier;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -47,13 +48,14 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
      * @return
      */
     @Override
-    public void registerMember(MemberRegistVo registVo) throws MobileExistException, UsernameExistException{
+    public MemberEntity registerMember(MemberRegistVo registVo) throws MobileExistException, UsernameExistException{
         // 1、首先检查该手机号是否已经注册过
         checkMobileUnique(registVo.getPhone());
         checkUsernameUnique(registVo.getUserName());
         // 2、未注册过，给一些字段添加默认值
         MemberEntity memberEntity = getMemberEntity(registVo);
         this.save(memberEntity);
+        return memberEntity;
     }
 
     @Override
@@ -73,19 +75,19 @@ public class MemberServiceImpl extends ServiceImpl<MemberDao, MemberEntity> impl
     }
 
     @Override
-    public boolean loginMember(MemberLoginVo loginVo) {
+    public MemberEntity loginMember(MemberLoginVo loginVo) {
         // 同一个字符串MD5加密后不同，因为密码加密时盐值是随机的，所以只能按照mobile查找，然后比对
-        return validPassword(loginVo);
-    }
-
-    private boolean validPassword(MemberLoginVo loginVo){
         MemberEntity memberEntity = this.getOne(new QueryWrapper<MemberEntity>().eq("mobile", loginVo.getLoginact()).or().eq("username", loginVo.getLoginact()));
         if(memberEntity != null){
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            return encoder.matches(loginVo.getPassword(), memberEntity.getPassword());
+            boolean rightPassword = encoder.matches(loginVo.getPassword(), memberEntity.getPassword());
+            if(rightPassword){
+                return memberEntity;
+            }
         }
-        return false;
+        return null;
     }
+
 
     private MemberEntity getMemberEntity(MemberRegistVo registVo){
         MemberEntity memberEntity = new MemberEntity();

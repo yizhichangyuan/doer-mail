@@ -6,15 +6,50 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8333
+        port: 8719
+
   thymeleaf:
     cache: false
 
   redis:
     host: 192.168.2.200
     port: 6379
+    jedis:
+      pool:
+        max-wait: -1
+        max-idle: 50
+        min-idle: 5
+        max-active: 50
+    timeout: 100000
 
+
+  session:
+    store-type: redis
+
+  main:
+    allow-bean-definition-overriding: true
+
+  # 服务调用链追踪
+  zipkin:
+    base-url: http://localhost:9411  # zipkin服务器地址
+    # 关闭服务发现，否则Spring Cloud会把zipkin的url当做服务名称
+    discovery-client-enabled: false
+    sender:
+      type: web # 设置使用 http 的方式传输数据
+  sleuth:
+    sampler:
+      probability: 1.0 # 设置抽样采集率为100%，默认为0.1，即10%
+
+# session的存活时间
 server:
   port: 20000
+  servlet:
+    session:
+      timeout: 30m
 
 #调用openfeign，hystrix的超时时间
 hystrix:
@@ -37,4 +72,8 @@ riboon:
   ReadTimeout: 300000
   ConnectTimeout: 30000
 
+# 该服务Feign远程调用其他服务熔断保护
+feign:
+  sentinel:
+    enabled: true
 

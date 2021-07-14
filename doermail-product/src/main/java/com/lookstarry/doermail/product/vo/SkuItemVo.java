@@ -34,6 +34,9 @@ public class SkuItemVo {
     // 5、获取spu的规格参数信息
     List<SpuItemAttrGroupVo> groupAttrs;
 
+    // 6、当前商品的秒杀信息，可能该商品未参与任何秒杀活动，为空
+    SecKillSkuVo secKillSkuVo;
+
 
     @Data
     public static class SkuItemSaleAttrVo{

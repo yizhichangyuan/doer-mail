@@ -10,6 +10,11 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8333
+        port: 8719
+
 #    alicloud:
 #      access-key: LTAI5t75KXjVWjGJhxUsBZxv   # oss文件上传key
 #      secret-key: N0ZiNdO6GEJQEKxZMmuHwTq2F8Fwg7 # oss文件上传密匙
@@ -29,6 +34,14 @@ spring:
   redis:
     host: 192.168.2.200
     port: 6379
+    jedis:
+      pool:
+        max-wait: -1
+        max-idle: 50
+        min-idle: 5
+        max-active: 50
+    timeout: 100000
+
 
   cache:
     type: redis
@@ -38,7 +51,22 @@ spring:
       use-key-prefix: true # 是否使用缓存前缀
       cache-null-values: true # 是否缓存空值，防止缓存穿透问题
 
+  session:
+    store-type: redis
 
+  # 服务调用链追踪
+  zipkin:
+    base-url: http://localhost:9411/  # zipkin服务器地址
+    # 关闭服务发现，否则Spring Cloud会把zipkin的url当做服务名称
+    discovery-client-enabled: false
+    sender:
+      type: web # 设置使用 http 的方式传输数据
+  sleuth:
+    sampler:
+      probability: 1.0 # 设置抽样采集率为100%，默认为0.1，即10%
+
+  main:
+    allow-bean-definition-overriding: true
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
@@ -54,12 +82,19 @@ server:
 
 logging:
   level:
-    com.lookstarry.doermail: debug
+    com.lookstarry.doermail: info
+    org.springframework.cloud.openfeign: debug
+    org.springframework.cloud.sleuth: debug
 
 
 feign:
+  sentinel:
+    enabled: false
+
   hystrix:
     enabled: true
+
+
 
 #调用openfeign，hystrix的超时时间
 hystrix:
@@ -87,4 +122,3 @@ doermall:
     core-pool-size: 20
     max-pool-size: 200
     keep-alive-time: 10
-

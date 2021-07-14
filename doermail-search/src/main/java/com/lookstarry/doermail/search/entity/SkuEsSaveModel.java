@@ -1,12 +1,8 @@
 package com.lookstarry.doermail.search.entity;
 
-import com.lookstarry.common.to.SkuEsModel;
+import com.lookstarry.common.to.es.SkuEsModel;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @PackageName:com.lookstarry.doermail.search

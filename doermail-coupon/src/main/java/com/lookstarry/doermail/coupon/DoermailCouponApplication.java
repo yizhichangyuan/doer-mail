@@ -1,5 +1,6 @@
 package com.lookstarry.doermail.coupon;
 
+import com.alibaba.cloud.sentinel.feign.SentinelFeignAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

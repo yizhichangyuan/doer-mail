@@ -1,15 +1,12 @@
 package com.lookstarry.doermail.member.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lookstarry.doermail.member.entity.MemberReceiveAddressEntity;
 import com.lookstarry.doermail.member.service.MemberReceiveAddressService;
@@ -30,6 +27,12 @@ public class MemberReceiveAddressController {
     @Autowired
     private MemberReceiveAddressService memberReceiveAddressService;
 
+    @GetMapping("/{memberId}/addr")
+    public List<MemberReceiveAddressEntity> getAddressById(@PathVariable("memberId") Long memberId){
+        List<MemberReceiveAddressEntity> address = memberReceiveAddressService.getAdressById(memberId);
+        return address;
+    }
+
     /**
      * 列表
      */
@@ -49,8 +52,7 @@ public class MemberReceiveAddressController {
     //@RequiresPermissions("member:memberreceiveaddress:info")
     public R info(@PathVariable("id") Long id) {
         MemberReceiveAddressEntity memberReceiveAddress = memberReceiveAddressService.getById(id);
-
-        return R.ok().put("memberReceiveAddress", memberReceiveAddress);
+        return R.ok().setData(memberReceiveAddress);
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.lookstarry.doermail.search.controller;
 
 import com.lookstarry.common.constant.BizCodeEnum;
-import com.lookstarry.common.to.SkuEsModel;
+import com.lookstarry.common.to.es.SkuEsModel;
 import com.lookstarry.common.utils.R;
 import com.lookstarry.doermail.search.entity.SkuEsSaveModel;
 import com.lookstarry.doermail.search.service.ProductSaveService;

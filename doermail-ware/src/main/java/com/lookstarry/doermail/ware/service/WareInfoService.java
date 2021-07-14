@@ -3,6 +3,7 @@ package com.lookstarry.doermail.ware.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lookstarry.common.utils.PageUtils;
 import com.lookstarry.doermail.ware.entity.WareInfoEntity;
+import com.lookstarry.doermail.ware.vo.FareVo;
 
 import java.util.Map;
 
@@ -16,5 +17,8 @@ import java.util.Map;
 public interface WareInfoService extends IService<WareInfoEntity> {
 
     PageUtils queryPageByCondition(Map<String, Object> params);
+
+    FareVo getFare(Long attrId);
+
 }
 

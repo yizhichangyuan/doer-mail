@@ -25,6 +25,7 @@
         <module>renren-generator</module>
         <module>doermail-common</module>
         <module>doermail-search</module>
+        <module>doermail-seckill</module>
     </modules>
 
 </project>

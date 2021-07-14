@@ -1,6 +1,6 @@
 package com.lookstarry.doermail.product.feign;
 
-import com.lookstarry.common.to.SkuEsModel;
+import com.lookstarry.common.to.es.SkuEsModel;
 import com.lookstarry.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

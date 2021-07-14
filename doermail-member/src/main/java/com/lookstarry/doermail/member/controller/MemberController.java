@@ -1,10 +1,8 @@
 package com.lookstarry.doermail.member.controller;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.lookstarry.common.constant.BizCodeEnum;
 import com.lookstarry.doermail.member.exception.MobileExistException;
 import com.lookstarry.doermail.member.exception.UsernameExistException;
@@ -38,23 +36,24 @@ public class MemberController {
 
     @PostMapping("/register")
     public R memberRegist(@RequestBody MemberRegistVo registVo){
+        MemberEntity memberEntity = null;
         try{
-            memberService.registerMember(registVo);
+            memberEntity = memberService.registerMember(registVo);
         }catch(UsernameExistException e){
             return R.error(BizCodeEnum.USERNAME_EXIST_EXCEPTION.getCode(), BizCodeEnum.USERNAME_EXIST_EXCEPTION.getMessage());
         }catch(MobileExistException e){
             return R.error(BizCodeEnum.PHONE_EXIST_EXCEPTION.getCode(), BizCodeEnum.PHONE_EXIST_EXCEPTION.getMessage());
         }
-        return R.ok();
+        return R.ok().put("data", memberEntity);
     }
 
     @PostMapping("/login")
     public R memberLogin(@RequestBody MemberLoginVo loginVo){
-        boolean success = memberService.loginMember(loginVo);
-        if(!success){
+        MemberEntity memberEntity = memberService.loginMember(loginVo);
+        if(memberEntity == null){
             return R.error(BizCodeEnum.LOGIN_FAIL_EXCEPTION.getCode(), BizCodeEnum.LOGIN_FAIL_EXCEPTION.getMessage());
         }
-        return R.ok();
+        return R.ok().put("data", memberEntity);
     }
 
     @RequestMapping("/coupons")

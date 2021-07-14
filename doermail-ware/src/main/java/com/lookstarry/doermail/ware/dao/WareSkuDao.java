@@ -19,4 +19,10 @@ import java.util.List;
 @Mapper
 public interface WareSkuDao extends BaseMapper<WareSkuEntity> {
     List<WareSkuLeftEntity> selectLeftStock(@Param("skuIds") List<Long> skuIds);
+
+    List<Long> listWareIdHasSkuStock(@Param("skuId") Long skuId, @Param("needNum") Integer needNum);
+
+    Long lockSkuStock(@Param("wareId") Long wareId, @Param("skuId") Long skuId, @Param("lockNum") Integer lockNum);
+
+    void unlockStock(@Param("skuId") Long skuId, @Param("wareId") Long wareId, @Param("num") Integer num);
 }

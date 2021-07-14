@@ -1,6 +1,6 @@
 package com.lookstarry.doermail.search.vo;
 
-import com.lookstarry.common.to.SkuEsModel;
+import com.lookstarry.common.to.es.SkuEsModel;
 import lombok.Data;
 
 import java.util.ArrayList;

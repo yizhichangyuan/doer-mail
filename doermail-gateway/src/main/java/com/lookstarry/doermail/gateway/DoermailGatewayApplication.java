@@ -1,5 +1,6 @@
 package com.lookstarry.doermail.gateway;
 
+import com.alibaba.cloud.sentinel.feign.SentinelFeignAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;

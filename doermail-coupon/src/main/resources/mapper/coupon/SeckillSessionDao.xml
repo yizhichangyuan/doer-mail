@@ -12,6 +12,10 @@
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
+    <select id="getLatest3DaySession" resultType="com.lookstarry.doermail.coupon.entity.SeckillSessionEntity">
+        select * from sms_seckill_session where DATE(start_time)
+            between DATE_SUB(CURRENT_DATE, INTERVAL 2 DAY) AND CURRENT_DATE;
+    </select>
 
 
 </mapper>

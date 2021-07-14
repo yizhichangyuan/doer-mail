@@ -1,15 +1,16 @@
 package com.lookstarry.doermail.order.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.lookstarry.doermail.order.entity.OrderReturnReasonEntity;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lookstarry.doermail.order.entity.MqMessageEntity;
 import com.lookstarry.doermail.order.service.MqMessageService;
@@ -27,6 +28,25 @@ import com.lookstarry.common.utils.R;
 public class MqMessageController {
     @Autowired
     private MqMessageService mqMessageService;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
+
+    @GetMapping("/sendMq")
+    public void sendMq(){
+        for(int i = 0; i < 10; i++){
+            if(i % 2 == 0){
+                OrderReturnReasonEntity reasonEntity = new OrderReturnReasonEntity();
+                reasonEntity.setId(1L);
+                reasonEntity.setName("test" + i);
+                reasonEntity.setCreateTime(new Date());
+                reasonEntity.setStatus(1);
+                rabbitTemplate.convertAndSend("hello-java-exchange", "hello.java", reasonEntity, new CorrelationData(UUID.randomUUID().toString()));
+            }else{
+                rabbitTemplate.convertAndSend("hello-java-exchange", "hello22.java", "hello world" + i, new CorrelationData(UUID.randomUUID().toString()));
+            }
+        }
+    }
 
     /**
      * 列表

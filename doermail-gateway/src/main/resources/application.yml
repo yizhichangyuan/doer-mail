@@ -4,8 +4,36 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
 
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8333
+        port: 8719  # 默认端口，每个微服务与控制台传输数据端口
+
+    zipkin:
+      base-url: http://localhost:9411  # zipkin服务器地址
+      # 关闭服务发现，否则Spring Cloud会把zipkin的url当做服务名称
+      discovery-client-enabled: false
+      sender:
+        type: web # 设置使用 http 的方式传输数据
+    sleuth:
+      sampler:
+        probability: 1.0 # 设置抽样采集率为100%，默认为0.1，即10%
+
     gateway:
       routes:
+        - id: ware_route
+          uri: lb://doermail-ware
+          predicates:
+            - Path= /api/ware/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
+
+        - id: doermall_seckill_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-seckill
+          predicates:
+            - Host=seckill.doermall.com
+
         - id: host_route
           # lb为load_balance使用复杂均衡，后面为服务名
           uri: lb://doermail-product
@@ -24,6 +52,24 @@ spring:
           predicates:
             - Host=auth.doermall.com
 
+        - id: doermall_cart_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-cart
+          predicates:
+            - Host=cart.doermall.com
+
+        - id: doermall_order_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-order
+          predicates:
+            - Host=order.doermall.com
+
+        - id: doermall_member_route
+          # lb为load_balance使用复杂均衡，后面为服务名
+          uri: lb://doermail-member
+          predicates:
+            - Host=member.doermall.com
+
         - id: product_route
           uri: lb://doermail-product
           predicates:
@@ -32,6 +78,13 @@ spring:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
             # http://localhost:88/api/product/category/list/tree -> http://localhost:10000/product/category/list/tree
             # 所以只需要保留api后面的部分然后转发给lb://doermail-product
+
+        - id: coupon_route
+          uri: lb://doermail-coupon
+          predicates:
+            - Path= /api/coupon/**
+          filters:
+            - RewritePath=/api(?<segment>/?.*), $\{segment}
 
         - id: third_party_route
           uri: lb://doermail-third-party
@@ -44,13 +97,6 @@ spring:
           uri: lb://doermail-member
           predicates:
             - Path= /api/member/**
-          filters:
-            - RewritePath=/api(?<segment>/?.*), $\{segment}
-
-        - id: ware_route
-          uri: lb://doermail-ware
-          predicates:
-            - Path= /api/ware/**
           filters:
             - RewritePath=/api(?<segment>/?.*), $\{segment}
 

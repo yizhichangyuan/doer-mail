@@ -9,4 +9,5 @@ package com.lookstarry.common.constant;
  */
 public class AuthServerConstant {
     public static final String PHONE_CODE_PREFIX = "sms:code:";
+    public static final String LOGIN_USER = "loginUser";
 }

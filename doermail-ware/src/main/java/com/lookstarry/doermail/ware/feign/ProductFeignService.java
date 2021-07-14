@@ -2,8 +2,10 @@ package com.lookstarry.doermail.ware.feign;
 
 import com.lookstarry.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -25,5 +27,8 @@ public interface ProductFeignService {
      * @PostMapping("/product/skuinfo/listByBatchId")，此时为@FeignClient("doermail-product")
      */
     @PostMapping("/product/skuinfo/listByBatchId")
-    public R listByBatchId(@RequestBody List<Long> skuIds);
+    R listByBatchId(@RequestBody List<Long> skuIds);
+
+    @RequestMapping("/product/spuinfo/info/{id}")
+    R spuInfo(@PathVariable("id") Long id);
 }

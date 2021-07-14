@@ -2,8 +2,7 @@ package com.lookstarry.doermail.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.lookstarry.common.constant.EsConstant;
-import com.lookstarry.common.to.SkuEsModel;
-import com.lookstarry.doermail.search.entity.SkuEsSaveModel;
+import com.lookstarry.common.to.es.SkuEsModel;
 import com.lookstarry.doermail.search.service.SearchService;
 import com.lookstarry.doermail.search.vo.SearchParam;
 import com.lookstarry.doermail.search.vo.SearchResult;
@@ -31,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ResultsExtractor;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;

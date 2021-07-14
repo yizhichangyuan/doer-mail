@@ -57,9 +57,12 @@
 							</li>
 						</ul>
 						<ul class="header_ul_right">
-							<li style="border: 0;"><a href="http://auth.doermall.com/login.html" class="aa">你好，请登录</a></li>
-							<li><a href="http://auth.doermall.com/register	.html" style="color: red;">免费注册</a> |</li>
-							<li><a href="/static/item/javascript:;" class="aa">我的订单</a> |</li>
+							<li style="border: 0;width:200px" >
+								<a href="http://auth.doermall.com/login.html" class="aa" th:if="${session.loginUser == null}">你好，请登录</a>
+								<a class="aa" th:if="${session.loginUser != null}">你好，[[${session.loginUser.username}]]</a>
+							</li>
+							<li><a href="http://auth.doermall.com/register.html" style="color: red;" th:if="${session.loginUser == null}">免费注册</a> |</li>
+							<li><a href="http://order.doermall.com/list.html" class="aa">我的订单</a> |</li>
 							<li class="jingdong"><a href="/static/item/javascript:;">我的京东</a><span class="glyphicon glyphicon-menu-down">|</span>
 								<ol class="jingdong_ol">
 									<li><a href="/static/item/javascript:;">待处理订单</a></li>
@@ -251,7 +254,7 @@
 				<nav>
 				<div class="nav_min">
 					<div class="nav_top">
-						<div class="nav_top_one"><a href="/static/item/#"><img src="/static/item/img/logo1.jpg"/></a></div>
+						<div class="nav_top_one"><a href="http://doermall.com"><img src="/static/item/img/logo1.jpg"/></a></div>
 						<div class="nav_top_two"><input type="text"/><button>搜索</button></div>
 						<div class="nav_top_three"><a href="/static/item/../JD_Shop/One_JDshop.html">我的购物车</a><span class="glyphicon glyphicon-shopping-cart"></span>
 							<div class="nav_top_three_1">
@@ -503,8 +506,13 @@
 									<span>￥</span>
 									<span th:text="${#numbers.formatDecimal(item.info.price,3,2)}">4499.00</span>
 								</li>
-								<li>
-									预约享资格
+								<li style="color:red" th:if="${item.secKillSkuVo != null}">
+									<span th:if="${#dates.createNow().getTime() < item.secKillSkuVo.startTime}">
+										商品秒杀将会在[[${#dates.format(new java.util.Date(item.secKillSkuVo.startTime), "yyyy-MM-dd HH:mm:ss")}]]开始
+									</span>
+									<span th:if="${#dates.createNow().getTime() >= item.secKillSkuVo.startTime && #dates.createNow().getTime() <= item.secKillSkuVo.endTime}">
+										秒杀价：[[${#numbers.formatDecimal(item.secKillSkuVo.seckillPrice, 1, 2)}]]
+									</span>
 								</li>
 								<li>
 									<a href="/static/item/">
@@ -608,7 +616,7 @@
 
 						<div class="box-btns clear">
 							<div class="box-btns-one">
-								<input type="text" name="" id="" value="1" />
+								<input type="text" name="" value="1" id="num"/>
 								<div class="box-btns-one1">
 
 									<div>
@@ -624,9 +632,14 @@
 
 								</div>
 							</div>
-							<div class="box-btns-two">
-								<a href="/static/item/../商品分类\index.html">
-									立即预约
+							<div class="box-btns-two" th:if="${item.secKillSkuVo != null && (#dates.createNow().getTime() >= item.secKillSkuVo.startTime && #dates.createNow().getTime() <= item.secKillSkuVo.endTime)}">
+								<a href="#" id="secKillA" th:attr="skuId=${item.secKillSkuVo.skuId},sessionId=${item.secKillSkuVo.promotionSessionId},code=${item.secKillSkuVo.randomCode}">
+									立即抢购
+								</a>
+							</div>
+							<div class="box-btns-two" th:if="${item.secKillSkuVo == null || (#dates.createNow().getTime() < item.secKillSkuVo.startTime || #dates.createNow().getTime() > item.secKillSkuVo.endTime)}">
+								<a href="#" id="addToCart" th:attr="skuId=${item.info.skuId}">
+									加入购物车
 								</a>
 							</div>
 							<div class="box-btns-three">
@@ -793,7 +806,7 @@
 
 					</ul>
 					<button class="Lijiyuyuessss">
-							立即预约
+							加入购物车
 						</button>
 					<ul class="shopjieshaos posi" style="display: none;">
 						<li class="jieshoa" style="background: #e4393c;">
@@ -1012,7 +1025,7 @@
 											<li>
 												<a href="/static/item/##">很给力（75）</a>
 											</li>
-											<li>
+								f			<li>
 												<a href="/static/item/##">反应灵敏（68）</a>
 											</li>
 											<li>
@@ -1297,6 +1310,26 @@
 		$(function(){
 			$("a[class='sku_attr_value']").parent().css({"border": "solid 1px #CCC"});
 			$("a[class='sku_attr_value checked']").parent().css({"border": "solid 1px red"});
+		})
+
+		$("#addToCart").click(function(){
+			var num = $("#num").val();
+			var skuId = $(this).attr("skuId");
+			location.href = "http://cart.doermall.com/addToCart?skuId=" + skuId + "&num=" + num;
+			return false;
+		})
+
+		$("#secKillA").click(function(){
+			var isLogin = [[${session.loginUser != null}]];
+			if(isLogin){
+				var killId = $(this).attr("sessionid") + "-" +  $(this).attr("skuid");
+				var key = $(this).attr("code");
+				var num = $("#num").val();
+				location.href = "http://seckill.doermall.com/kill?killId=" + killId + "&key=" + key + "&num=" + num;
+			}else{
+				alert("请首先登陆");
+			}
+			return false;
 		})
 	</script>
 

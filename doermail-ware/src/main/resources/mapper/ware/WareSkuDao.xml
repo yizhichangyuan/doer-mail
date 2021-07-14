@@ -13,6 +13,15 @@
         <result property="stockLocked" column="stock_locked"/>
     </resultMap>
 
+    <update id="lockSkuStock">
+        update wms_ware_sku set stock_locked = stock_locked + #{lockNum}
+            where sku_id = #{skuId} and ware_id = #{wareId} and stock - stock_locked >= #{lockNum}
+    </update>
+    <update id="unlockStock">
+        update wms_ware_sku set stock_locked = stock_locked - #{num}
+        where sku_id = #{skuId} and ware_id = #{wareId};
+    </update>
+
     <select id="selectLeftStock" resultType="com.lookstarry.doermail.ware.entity.WareSkuLeftEntity">
         select sku_id,sum(stock - stock_locked) as stock_left from wms_ware_sku
         where sku_id in
@@ -23,4 +32,10 @@
         </if>
         group by sku_id;
     </select>
+    <select id="listWareIdHasSkuStock" resultType="java.lang.Long">
+        SELECT ware_id from wms_ware_sku
+            WHERE (stock - stock_locked) >= #{needNum}
+            AND sku_id = #{skuId};
+    </select>
+
 </mapper>

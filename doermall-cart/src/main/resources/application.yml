@@ -1,0 +1,49 @@
+server:
+  port: 40000
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8333
+        port: 8719
+
+  application:
+    name: doermail-cart
+
+
+  redis:
+    host: 192.168.2.200
+    jedis:
+      pool:
+        max-wait: -1
+        max-idle: 50
+        min-idle: 0
+        max-active: 50
+    timeout: 100000
+
+  # 服务调用链追踪
+  zipkin:
+    base-url: http://localhost:9411  # zipkin服务器地址
+    # 关闭服务发现，否则Spring Cloud会把zipkin的url当做服务名称
+    discoveryClientEnabled: false
+    sender:
+      type: web # 设置使用 http 的方式传输数据
+  sleuth:
+    sampler:
+      probability: 1.0 # 设置抽样采集率为100%，默认为0.1，即10%
+
+doermall:
+  thread:
+    core-pool-size: 20
+    max-pool-size: 200
+    keep-alive-time: 10
+
+# 该服务Feign远程调用其他服务熔断保护
+feign:
+  sentinel:
+    enabled: true

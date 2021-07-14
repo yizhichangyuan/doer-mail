@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: doermail-seckill
+
+  redis:
+    host: 192.168.2.200
+    jedis:
+      pool:
+        max-wait: -1
+        max-idle: 50
+        min-idle: 0
+        max-active: 50
+    timeout: 100000
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    # 限流、熔断、降级
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8333
+        port: 8719  # 默认端口，每个微服务与控制台传输数据端口
+
+  # 定时任务线程池，防止一个任务超时阻塞下一个定时任务的执行
+  task:
+    execution:
+      pool:
+        core-size: 20
+        max-size: 50
+
+  # 分布式session存储方式
+  session:
+    store-type: redis
+
+  # 消息队列服务器
+  rabbitmq:
+    host: 192.168.2.200
+    virtual-host: /
+
+  thymeleaf:
+    cache: false
+
+  # 服务调用链追踪
+  zipkin:
+    base-url: http://localhost:9411  # zipkin服务器地址
+    # 关闭服务发现，否则Spring Cloud会把zipkin的url当做服务名称
+    discovery-client-enabled: false
+    sender:
+      type: web # 设置使用 http 的方式传输数据
+  sleuth:
+    sampler:
+      probability: 1.0 # 设置抽样采集率为100%，默认为0.1，即10%
+
+
+#  task:
+#    scheduling:
+#      pool:
+#        size: 5
+
+server:
+  port: 25000
+
+# 该服务Feign远程调用其他服务熔断保护
+feign:
+  sentinel:
+    enabled: true
+
+logging:
+  level:
+    com.lookstarry.doermail: info
+    org.springframework.cloud.openfeign: debug
+    org.springframework.cloud.sleuth: debug
